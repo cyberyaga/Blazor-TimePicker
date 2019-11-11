@@ -1,0 +1,38 @@
+<input type="time" class="form-control"  @bind-value="@timeStr" />
+
+@code
+{
+    string _timeStr;
+    private string timeStr 
+    {
+        get => _timeStr;
+        set
+        {
+            _timeStr = value;
+            if (DateTime.TryParse(timeStr, out timeDt))
+            {
+                TimeChanged.InvokeAsync(timeDt);
+                this.StateHasChanged();
+            }            
+        }
+    }
+
+    private DateTime timeDt;
+
+    [Parameter]
+    public DateTime Time 
+    {
+        get => timeDt;
+        set
+        {
+            timeDt = value;
+            if (timeStr != value.ToString("HH:mm"))
+            {
+                timeStr = value.ToString("HH:mm");
+            }
+        }
+    }
+
+    [Parameter]
+    public EventCallback<DateTime> TimeChanged {get;set;}
+}
